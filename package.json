@@ -1,0 +1,22 @@
+{
+  "name": "loreal",
+  "version": "1.0.0",
+  "description": "Connecting to Facebook Messenger",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "i": "^0.3.7",
+    "loreal": "file:",
+    "morgan": "^1.10.0",
+    "npm": "^9.8.1",
+    "postmonger": "^0.0.16",
+    "request": "^2.88.2",
+    "require": "^0.4.4",
+    "winston": "^3.10.0"
+  }
+}

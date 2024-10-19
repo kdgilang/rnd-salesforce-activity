@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Custom Journey Builder Activity</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+
+  <script type="text/javascript" src="require.js"></script>
+</head>
+<script type="text/javascript">
+  (function () {
+    var config = {
+      baseUrl: "",
+    };
+
+    var dependencies = ["customActivity"];
+
+    require(config, dependencies);
+  })();
+</script>
+
+<!--Styles-->
+<style type="text/css">
+  body {
+    padding: 20px;
+    margin: 0;
+  }
+
+  .step {
+    display: none;
+  }
+
+  #step1 {
+    display: block;
+  } 
+</style>
+
+<body>
+  <div id="step1" class="step container">
+    <label for="title">Select your Template:</label>
+      <div class="col-md-5">
+        <select id="select1" class="form-select" aria-label="Select your SMS Template">
+          <option value="">Select Template</option>
+          <option value="button_template">Button template</option>
+          <option value="generic_template">Generic template</option>
+          <option value="media_template">Media template</option>
+          <option value="list_template">List template</option>
+        </select>
+      </div>
+    <!--button id="toggleLastStep">Toggle Last Step</button-->
+  </div>
+  <div id="step2" class="step container"> 
+    <form id="fb_id">
+    <div class="row ">
+      <div class="col-md-9">
+        <p>Note : Use this tag {firstname} to replace the Firstname. Use this tag {lastname} to replace the Lastname. </p>
+      <div class="form-group">
+        <label for="title">Title:</label> 
+          <input type="text" id="title" name="title" class="form-control title"> 
+      </div>
+      <div class="form-group">
+        <label for="image_url">Image URL:</label> 
+          <input type="url" id="image_url" name="image_url" class="form-control image_url"> 
+      </div>
+      <div class="form-group">
+        <label for="subtitle">Subtitle:</label> 
+          <input type="text" id="subtitle" name="subtitle" class="form-control subtitle"> 
+      </div> 
+
+      <div class="col-xs-12">
+        <div class="col-md-12"> 
+          <div class="form-group fieldGroup">
+            <div class="input-group">
+                <div class="form-group">
+                  <label for="btn_url">Button Type:</label>
+                  <div class="col-md-11">  
+                    <select  id="btn_type" name="btn_type[]" class="form-select" aria-label="Select Button Type"> 
+                      <option value="web_url">Website URL</option>
+                      <option value="phone_number">Call us</option>
+                      <option value="account_link">Log In</option>
+                    </select>
+                    </div>
+                </div>
+                <div class=" form-group">
+                  <label for="btn_title">Button Link:</label>
+                  <div class="col-md-11">
+                    <input type="text" id="btn_url" name="btn_url[]" class="form-control input-md" placeholder="Enter Button URL"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="btn_title">Button Title:</label>
+                  <div class="col-md-11">
+                    <input type="text" id="btn_title" name="btn_title[]" class="form-control input-md" placeholder="Enter Button Title"/>
+                  </div>
+                </div> 
+                <div class="input-group-addon form-group"> 
+                  <label for="addMore"></label>
+                    <div class="col-md-11">
+                      <a href="javascript:void(0)" class="btn btn-success addMore"><span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        </div>
+      </div>   
+
+
+      </div>
+      <div class="col-md-3">
+        <div class="container">
+          <div class="card" style="width: 18rem;">
+            <div class="preview" style="display: none;">
+              <img src="..." class="card-img-top" id="preview_image" alt="...">
+              <div class="card-body">
+                <h5 class="card-title text-center" id="preview_title"></h5>
+                <p class="card-text text-center" id="preview_subtitle"> </p>
+                <div class="d-grid gap-2 col-12 mx-auto"> 
+                  <a href="#" class="btn btn btn-secondary" id="preview_bt1"></a>
+                  <a href="#" class="btn btn-secondary" id="preview_bt2" style="display: none;"></a>
+                  <a href="#" class="btn btn-secondary" id="preview_bt3" style="display: none;"></a>
+              </div>
+              </div>
+            </div>
+          </div> 
+          
+          <div class="form-group pt-4">
+            <button type="button" class="btn btn-primary" id="preview_button">Preview</button>
+
+            <!-- <button type="button" class="btn btn-primary" id="val_button">validate</button> -->
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </form>
+  </div>   
+  </div>
+  
+
+  
+  <!-- copy of input fields group -->
+<div class="form-group fieldGroupCopy" style="display: none;">
+  <div class="input-group"> 
+      <div class="form-group">
+        <label for="btn_url">Button Type:</label>
+        <div class="col-md-11">
+          <select name="btn_type[]" class="form-select fb_button_type" aria-label="Select Button Type"> 
+            <option value="">Select the Type</option>
+            <option value="web_url">Website URL</option>
+            <option value="phone_number">Call us</option>
+            <option value="account_link">Log In</option>
+          </select>
+          </div>
+      </div>
+      <div class=" form-group">
+        <label for="btn_title">Button Link:</label>
+        <div class="col-md-11">
+          <input type="text" name="btn_url[]" class="form-control input-md fb_button_url" placeholder="Enter Button Link "/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="btn_title">Button Title:</label>
+        <div class="col-md-11">
+          <input type="text" name="btn_title[]" class="form-control input-md fb_button_title" placeholder="Enter Button Title"/>
+        </div>
+      </div> 
+      <div class="input-group-addon form-group"> 
+        <label for="addMore"></label>
+          <div class="col-md-11">
+            <a href="javascript:void(0)" class="btn btn-danger remove"><span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
+          </div>
+      </div> 
+     
+  </div>
+</div>
+
+  <script>
+     $(document).ready(function(){
+    //group add limit
+    var maxGroup = 3;
+    
+    //add more fields group
+    $(".addMore").click(function(){
+        if($('body').find('.fieldGroup').length < maxGroup){
+          var index = $('body').find('.fieldGroup').length;
+            var fieldHTML = '<div class="form-group fieldGroup" id="fieldIndex_'+index+'">'+$(".fieldGroupCopy").html()+'</div>';
+            $('body').find('.fieldGroup:last').after(fieldHTML);
+            $('body').find('#fieldIndex_'+index).find('.fb_button_type').attr('id', 'btn_type_'+index);
+            $('body').find('#fieldIndex_'+index).find('.fb_button_url').attr('id', 'btn_url_'+index);
+            $('body').find('#fieldIndex_'+index).find('.fb_button_title').attr('id', 'btn_title_'+index);
+
+        }else{
+            alert('Maximum '+maxGroup+' groups are allowed.');
+        }
+    });
+    
+    //remove fields group
+    $("body").on("click",".remove",function(){ 
+        $(this).parents(".fieldGroup").remove();
+    }); 
+
+    $("#btn_type").on('change',function(){
+
+      if($(this).val() == "account_link"){
+        $("#btn_title").attr("disabled",true);
+        $("#btn_title").value("");
+      }
+
+    });
+    $("#btn_type_1").on('change',function(){
+
+      if($(this).val() == "account_link"){
+        $("#btn_title_1").attr("disabled",true);
+        $("#btn_title_1").value("");
+      }
+
+    });
+    $("#btn_type_2").on('change',function(){
+
+      if($(this).val() == "account_link"){
+        $("#btn_title_2").attr("disabled",true);
+        $("#btn_title_2").value("");
+      }
+
+    });
+ 
+  
+  $('#fb_id').validate({
+    rules: {
+      ignore: [],
+      "title": {
+        required: true,
+      },
+      "image_url": {
+        required: true,
+        url: true
+      },
+      "subtitle": {
+        required: true,
+      },
+      "btn_url[]": {
+        required: true 
+      },
+      "btn_title[]": {
+        required: true, 
+      },
+      "btn_type[]": {
+        required: true, 
+      },
+      
+    }
+});
+$('#val_button').on("click",function(){  
+  $("#fb_id").valid();
+
+});
+
+    $("#preview_button").on("click",function(){ 
+      $(".preview").show();
+      $("#preview_bt1").show();
+      var i = $('#image_url').val();
+      var t = $('#title').val();
+      var s = $('#subtitle').val();
+      var b1 = $('#btn_title').val();
+
+      $('#preview_image').attr("src",i)
+      $('#preview_title').html(t)
+      $('#preview_subtitle').html(s)
+      $('#preview_subtitle').html(s)
+      $("#preview_bt1").html(b1);
+
+      if (document.getElementById('btn_title_1')) {
+        var b2 = $('#btn_title_1').val();
+        $("#preview_bt2").show();
+        $("#preview_bt2").html(b2);
+      }else{
+        $("#preview_bt2").hide();
+        $("#preview_bt2").html("");
+      }
+      if (document.getElementById('btn_title_2')) {
+        var b3 = $('#btn_title_2').val();
+        $("#preview_bt3").show();
+        $("#preview_bt3").html(b3);
+      }else{
+        $("#preview_bt3").hide();
+        $("#preview_bt3").html("");
+      }
+
+    }); 
+});
+  </script>
+</body>
+
+</html>
